@@ -1,0 +1,198 @@
+antlr4 -Dlanguage=Python3 -no-listener -visitor forth.g4
+python3 -m doctest -v test.txt
+line 1:0 extraneous input 'if' expecting {<EOF>, ':', 'recurse', '+', '-', '*', '/', 'mod', 'dup', 'swap', 'drop', 'over', 'rot', '2dup', '2swap', '2drop', '2over', '.', '.s', '=', '<>', '<', '>', 'and', 'or', 'not', ID, NUMBER}
+line 1:7 extraneous input 'endif' expecting {<EOF>, ':', 'recurse', '+', '-', '*', '/', 'mod', 'dup', 'swap', 'drop', 'over', 'rot', '2dup', '2swap', '2drop', '2over', '.', '.s', '=', '<>', '<', '>', 'and', 'or', 'not', ID, NUMBER}
+Trying:
+    from antlr4 import InputStream
+Expecting nothing
+ok
+Trying:
+    from forth import interpret
+Expecting nothing
+ok
+Trying:
+    def run(code):
+        interpret(InputStream(code))
+Expecting nothing
+ok
+Trying:
+    run("10 20 + .")
+Expecting:
+    30
+ok
+Trying:
+    run("10 20 - .")
+Expecting:
+    -10
+ok
+Trying:
+    run("2 3 * .")
+Expecting:
+    6
+ok
+Trying:
+    run("20 3 / .")
+Expecting:
+    6
+ok
+Trying:
+    run("20 3 mod .")
+Expecting:
+    2
+ok
+Trying:
+    run("0 5 - .")
+Expecting:
+    -5
+ok
+Trying:
+    run("1 2 3 .s")
+Expecting:
+    <3> [1 2 3]
+ok
+Trying:
+    run("1 dup .s")
+Expecting:
+    <2> [1 1]
+ok
+Trying:
+    run("1 2 swap .s")
+Expecting:
+    <2> [2 1]
+ok
+Trying:
+    run("1 2 drop .s")
+Expecting:
+    <1> [1]
+ok
+Trying:
+    run("1 2 over .s")
+Expecting:
+    <3> [1 2 1]
+ok
+Trying:
+    run("1 2 3 rot .s")
+Expecting:
+    <3> [2 3 1]
+ok
+Trying:
+    run("1 2 2dup .s")
+Expecting:
+    <4> [1 2 1 2]
+ok
+Trying:
+    run("1 2 3 4 2swap .s")
+Expecting:
+    <4> [3 4 1 2]
+ok
+Trying:
+    run("5 5 = .")
+Expecting:
+    -1
+ok
+Trying:
+    run("5 4 = .")
+Expecting:
+    0
+ok
+Trying:
+    run("5 4 <> .")
+Expecting:
+    -1
+ok
+Trying:
+    run("3 4 < .")
+Expecting:
+    -1
+ok
+Trying:
+    run("3 4 > .")
+Expecting:
+    0
+ok
+Trying:
+    run("-1 not .")
+Expecting:
+    0
+ok
+Trying:
+    run("-1 -1 and .")
+Expecting:
+    -1
+ok
+Trying:
+    run("-1 0 or .")
+Expecting:
+    -1
+ok
+Trying:
+    run(": test 5 < if 10 else 20 endif . ;")
+Expecting nothing
+ok
+Trying:
+    run("3 test")
+Expecting:
+    10
+ok
+Trying:
+    run("8 test")
+Expecting:
+    20
+ok
+Trying:
+    run(": test2 0 = if 99 . endif ;")
+Expecting nothing
+ok
+Trying:
+    run("0 test2")
+Expecting:
+    99
+ok
+Trying:
+    run("1 test2")
+Expecting nothing
+ok
+Trying:
+    run(": fact dup 2 < if drop 1 else dup 1 - recurse * endif ;")
+Expecting nothing
+ok
+Trying:
+    run("5 fact .")
+Expecting:
+    120
+ok
+Trying:
+    run("1 fact .")
+Expecting:
+    1
+ok
+Trying:
+    run("10 0 /")
+Expecting:
+    Runtime Error: Division by zero
+ok
+Trying:
+    run("drop")
+Expecting:
+    Runtime Error: Stack underflow
+ok
+Trying:
+    run("hola")
+Expecting:
+    Runtime Error: Unknown word: hola
+ok
+Trying:
+    run("if 1 . endif")
+Expecting:
+    Syntax Error
+ok
+Trying:
+    run("recurse")
+Expecting:
+    Runtime Error: recurse used outside of a function definition
+ok
+1 items passed all tests:
+  39 tests in test.txt
+39 tests in 1 items.
+39 passed and 0 failed.
+Test passed.

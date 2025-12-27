@@ -1,0 +1,134 @@
+PROVES DEL PROJECTE MINI FORTH
+==============================
+
+Configuració inicial
+--------------------
+Importem les llibreries necessàries i definim una funció auxiliar 'run' 
+per no haver d'escriure 'InputStream' a cada test.
+
+>>> from antlr4 import InputStream
+>>> from forth import interpret
+>>> def run(code):
+...     interpret(InputStream(code))
+
+1. Aritmètica Bàsica
+--------------------
+Comprovem les operacions bàsiques i la gestió de negatius.
+Nota: El punt '.' imprimeix sense salt de línia.
+
+>>> run("10 20 + .")
+30
+>>> run("10 20 - .")
+-10
+>>> run("2 3 * .")
+6
+>>> run("20 3 / .")
+6
+>>> run("20 3 mod .")
+2
+>>> run("0 5 - .")
+-5
+
+2. Manipulació de la Pila
+-------------------------
+Proves de dup, swap, drop, over, rot i les seves variants dobles.
+Utilitzem .s per veure l'estat complet de la pila.
+
+>>> run("1 2 3 .s")
+<3> [1 2 3]
+
+>>> run("1 dup .s")
+<2> [1 1]
+
+>>> run("1 2 swap .s")
+<2> [2 1]
+
+>>> run("1 2 drop .s")
+<1> [1]
+
+>>> run("1 2 over .s")
+<3> [1 2 1]
+
+>>> run("1 2 3 rot .s")
+<3> [2 3 1]
+
+>>> run("1 2 2dup .s")
+<4> [1 2 1 2]
+
+>>> run("1 2 3 4 2swap .s")
+<4> [3 4 1 2]
+
+3. Lògica Booleana i Comparadors
+--------------------------------
+Recordatori: True és -1, False és 0.
+
+>>> run("5 5 = .")
+-1
+>>> run("5 4 = .")
+0
+>>> run("5 4 <> .")
+-1
+>>> run("3 4 < .")
+-1
+>>> run("3 4 > .")
+0
+>>> run("-1 not .")
+0
+>>> run("-1 -1 and .")
+-1
+>>> run("-1 0 or .")
+-1
+
+4. Funcions i Estructures de Control
+------------------------------------
+Els IF només poden anar dins de definicions (: ... ;).
+
+Definim una funció senzilla per provar el IF/ELSE:
+>>> run(": test 5 < if 10 else 20 endif . ;")
+>>> run("3 test")
+10
+>>> run("8 test")
+20
+
+Provem el IF sense ELSE:
+>>> run(": test2 0 = if 99 . endif ;")
+>>> run("0 test2")
+99
+>>> run("1 test2")
+
+5. Recursivitat
+---------------
+La prova de foc: El Factorial.
+Definició: n! = n * (n-1)!
+Cas base: si n < 2, retorna 1.
+
+>>> run(": fact dup 2 < if drop 1 else dup 1 - recurse * endif ;")
+>>> run("5 fact .")
+120
+>>> run("1 fact .")
+1
+
+6. Gestió d'Errors (Robustesa)
+------------------------------
+El programa no ha de petar, ha de mostrar missatges d'error controlats.
+
+Error: Divisió per zero
+>>> run("10 0 /")
+Runtime Error: Division by zero
+
+Error: Stack Underflow (treure de pila buida)
+>>> run("drop")
+Runtime Error: Stack underflow
+
+Error: Paraula desconeguda
+>>> run("hola")
+Runtime Error: Unknown word: hola
+
+Error: Ús de condicionals fora de funció (Error Sintàctic o Runtime segons gramàtica)
+A la nostra gramàtica, IF al root dóna error de sintaxi perquè root no accepta control_structure.
+>>> run("if 1 . endif")
+Syntax Error
+
+Error: Recurse fora de funció
+>>> run("recurse")
+Runtime Error: recurse used outside of a function definition
