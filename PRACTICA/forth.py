@@ -230,6 +230,7 @@ def interpret(input_stream):
     token_stream = CommonTokenStream(lexer)
     parser = forthParser(token_stream)
     
+    parser.removeErrorListeners()
     # L'entrada comença per la regla 'root'
     tree = parser.root()
     
@@ -249,12 +250,28 @@ def interpret(input_stream):
         # Captura genèrica per si de cas
         print(f"Error: {e}")
 
-if __name__ == '__main__':
-    # Si executem el fitxer directament, llegim de stdin
-    # Això permet fer: echo "1 2 .s" | python3 forth.py
-    if len(sys.argv) > 1:
-        input_stream = FileStream(sys.argv[1])
-    else:
-        input_stream = InputStream(sys.stdin.read())
+if __name__ == "__main__":
+    import sys
     
-    interpret(input_stream)
+    # Si hi ha arguments o estem passant un fitxer per "pipe" (<), executem normal
+    if len(sys.argv) > 1 or not sys.stdin.isatty():
+        input_stream = InputStream(sys.stdin.read())
+        interpret(input_stream)
+    
+    # Si no, obrim mode interactiu
+    else:
+        print("Mini Forth Interpreter (escriu 'exit' per sortir)")
+        while True:
+            try:
+                # Mostrem un prompt personalitzat
+                text = input("? ")
+                if text.strip() == "exit": break
+                
+                # Executem la línia
+                interpret(InputStream(text))
+                print() # Salt de línia extra per estètica
+                
+            except EOFError:
+                break
+            except Exception as e:
+                print(f"Error: {e}")

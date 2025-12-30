@@ -34,10 +34,22 @@ El projecte inclou un `Makefile` per facilitar les tasques:
     make test-v    # Execució detallada (verbose)
     ```
 3.  **Executar l'intèrpret interactiu:**
+    Inicia la consola REPL per provar codi manualment:
     ```bash
-    python3 -i forth.py
+    make run
     ```
-    Un cop dins, pots provar comandes: `interpret('1 2 + .')`.
+    S'obrirà l'entorn interactiu. Aquí tens un **exemple d'ús**:
+
+    ```text
+    Mini Forth Interpreter (escriu 'exit' per sortir)
+    ? 10 20 + .
+    30
+    ? : quadrat dup * ;
+    ? 5 quadrat .
+    25
+    ? exit
+    ```
+
 
 4.  **Netejar fitxers generats:**
     ```bash
