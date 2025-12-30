@@ -56,6 +56,19 @@ El projecte inclou un `Makefile` per facilitar les tasques:
     make clean
     ```
 
+ 5. **Joc de Proves (Tests)**
+
+El projecte inclou un conjunt exhaustiu de proves automatitzades al fitxer `test.txt`, implementat utilitzant el mòdul **`doctest`** de Python. Aquest format permet que els tests serveixin simultàniament com a documentació d'ús i com a verificació funcional.
+
+Les proves estan organitzades temàticament i cobreixen la totalitat dels requisits de la pràctica:
+
+* **Aritmètica:** Operacions bàsiques (`+`, `-`, `*`, `/`, `mod`) i gestió de nombres negatius.
+* **Manipulació de la Pila:** Comprovació del funcionament correcte de `dup`, `swap`, `drop`, `over`, `rot` i les seves variants dobles (`2dup`, `2swap`, etc.).
+* **Lògica i Comparadors:** Avaluació d'expressions booleanes (`=`, `<`, `>`) i operadors lògics (`and`, `or`, `not`).
+* **Estructures de Control:** Testeig de condicionals `if ... else ... endif` niats i simples dins de definicions.
+* **Funcions i Recursivitat:** Definició de noves paraules i verificació d'algorismes recursius (ex: càlcul del factorial).
+* **Robustesa i Errors:** Es verifica que l'intèrpret gestiona correctament situacions anòmales (divisió per zero, *stack underflow*, paraules desconegudes) llançant les excepcions controlades corresponents sense tancar el programa inesperadament.
+
 ## Decisions de Disseny
 
 ### 1. Ús del patró Visitor
